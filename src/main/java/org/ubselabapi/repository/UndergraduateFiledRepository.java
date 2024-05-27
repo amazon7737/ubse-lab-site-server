@@ -11,4 +11,6 @@ public interface UndergraduateFiledRepository extends JpaRepository<Undergraduat
     List<UndergraduateFiled> findByUndergraduateId(@Param("undergraduateId") Long undergraudateId);
 
 
+    void deleteAllByUndergraduateId(@Param("undergraduateId") Long id);
+
 }

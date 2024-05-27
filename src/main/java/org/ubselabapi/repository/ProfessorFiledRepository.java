@@ -1,6 +1,7 @@
 package org.ubselabapi.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.ubselabapi.domain.ProfessorFiled;
@@ -14,6 +15,10 @@ public interface ProfessorFiledRepository extends JpaRepository<ProfessorFiled, 
     @Query("select m from ProfessorFiled  m where m.professor_id = :professor_id")
     List<ProfessorFiled> findByProfessorId(@Param("professor_id") Long professor_id);
 
+
+    @Modifying
+    @Query("delete from ProfessorFiled m where m.professor_id = :professor_id")
+    void deleteAllByProfessor_id(@Param("professor_id") Long professor_id);
 
 
 }

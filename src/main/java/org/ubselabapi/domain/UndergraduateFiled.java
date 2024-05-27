@@ -3,6 +3,7 @@ package org.ubselabapi.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+// 학부생 분야
 @Entity
 @Table(name = "UnderGraduateFiled")
 @Getter

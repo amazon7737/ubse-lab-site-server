@@ -1,7 +1,9 @@
 package org.ubselabapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.ManyToAny;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.ubselabapi.domain.Project;
 import org.ubselabapi.domain.ProjectLink;
 import org.ubselabapi.domain.ProjectMember;
@@ -121,6 +123,7 @@ public class ProjectService {
         return resultList;
     }
 
+    @Transactional
     public void saveProject(ProjectDto.createProjectRequest dto) throws IOException {
 
         /**
@@ -177,6 +180,7 @@ public class ProjectService {
     }
 
 
+    @Transactional
     public void deleteProject(Long projectId){
 
         Project project = projectRepository.findById(projectId).get();

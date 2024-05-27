@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 교수님 설명
+ */
 @Entity
 @Table(name = "ProfessorFiled")
 @Builder

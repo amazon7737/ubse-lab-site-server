@@ -18,6 +18,7 @@ public class Professor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 프로필 사진 번호
     @Column(nullable = true, length = 45, unique = false)
     private Long profile;
 

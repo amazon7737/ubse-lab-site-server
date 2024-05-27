@@ -17,7 +17,6 @@ public class GraduateDto {
 
     private String company;
 
-    private String graudated_date;
 
 }
 

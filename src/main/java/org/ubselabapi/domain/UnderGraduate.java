@@ -2,6 +2,8 @@ package org.ubselabapi.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 
 @Entity
 @Table(name = "UnderGraduate")
@@ -25,8 +27,8 @@ public class UnderGraduate {
     @Column(nullable = true, length = 45, unique = false)
     private String email;
 
-    @Column(nullable = true, length = 45, unique = false)
-    private filed filed;
+//    @Column(nullable = true, length = 45, unique = false)
+//    private filed filed;
 
 
 }

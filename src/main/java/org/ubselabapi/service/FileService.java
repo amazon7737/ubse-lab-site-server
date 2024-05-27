@@ -1,8 +1,12 @@
 package org.ubselabapi.service;
 
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.ubselabapi.domain.Image;
 import org.ubselabapi.domain.UploadFile;
@@ -16,10 +20,12 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class FileService {
 
+
     private final FileStore fileStore;
 
     private final ImageRepository imageRepository;
 
+    @Transactional
     public Long uploadFile(MultipartFile file) throws IOException {
 
         UploadFile attachFile = fileStore.storeFile(file);
@@ -29,14 +35,16 @@ public class FileService {
         return id;
     }
 
+    @Transactional
     public Long saveUrl(UploadFile file) {
 
+        //http://146.56.109.210:8000/display?filename=b93e6344-4db9-43bb-9fd8-1a595308026e.jpg
         Image image = Image.builder()
-                .url(file.getStoreFileName())
+                .url( "http://146.56.109.210:8000/display?filename="+file.getStoreFileName())
                 .build();
 
-         imageRepository.save(image);
-         return imageRepository.findByImageUrl(file.getStoreFileName()).getId();
+         Long id = imageRepository.save(image).getId();
+         return id;
 
 
     }
@@ -49,6 +57,8 @@ public class FileService {
         return imageRepository.findByImageUrl(url);
     }
 
+
+    @Transactional
     public void deleteImage(Long imageId){
         imageRepository.deleteById(imageId);
     }

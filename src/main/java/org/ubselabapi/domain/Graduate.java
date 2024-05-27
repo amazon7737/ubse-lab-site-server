@@ -19,7 +19,7 @@ public class Graduate {
     private Long id;
 
     @Column(nullable = true, length = 45, unique = false)
-    private String graduated_date;
+    private Long graduated_date;
 
     @Column(nullable = true, length = 45 , unique = false)
     private String name;

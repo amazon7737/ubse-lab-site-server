@@ -4,6 +4,7 @@
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;
 //import org.ubselabapi.repository.*;
+//import org.ubselabapi.service.FileService;
 //
 //@SpringBootTest
 ////@Slf4j
@@ -30,13 +31,32 @@
 //    @Autowired
 //    GraduateRepository graduateRepository;
 //
+//    @Autowired
+//    UndergraduateFiledRepository undergraduateFiledRepository;
+//
+//    @Autowired
+//    ImageRepository imageRepository;
+//
+//    @Test
+//    void imageInputData(){
+//
+//        Image image = Image.builder()
+//                .url("https://raw.githubusercontent.com/qqaazz0222/Lab-UbSE/main/src/pages/manageMember/profiles/no-profile.jpg")
+//                .build();
+//
+//        imageRepository.save(image);
+//
+//
+//
+//    }
+//
 //    @Test
 //    void professorDataInput(){
 //
 //        Professor professor = Professor.builder()
 //                .email("mkmoon@dongseo.ac.kr")
 //                .name("문미경")
-//                .profile(null)
+//                .profile(1L)
 //                .build();
 //
 //        professorRepository.save(professor);
@@ -90,40 +110,65 @@
 //        UnderGraduate underGraduate = UnderGraduate.builder()
 //                .email("honggildong@dongseo.ac.kr")
 //                .name("홍길동")
-//                .filed(filed.인공지능)
-//                .profile(null)
+//                .profile(1L)
 //                .build();
 //
 //        UnderGraduate underGraduate2 = UnderGraduate.builder()
 //                .email("honggildong@dongseo.ac.kr")
 //                .name("홍길동")
-//                .filed(filed.머신러닝)
-//                .profile(null)
+//                .profile(1L)
 //                .build();
 //
 //        UnderGraduate underGraduate3 = UnderGraduate.builder()
 //                .email("honggildong@dongseo.ac.kr")
 //                .name("홍길동")
-//                .filed(filed.웹개발)
-//                .profile(null)
+//                .profile(1L)
 //                .build();
 //
 //        UnderGraduate underGraduate4 = UnderGraduate.builder()
 //                .email("honggildong@dongseo.ac.kr")
 //                .name("홍길동")
-//                .filed(filed.빅데이터)
-//                .profile(null)
+//                .profile(1L)
+//                .build();
+//
+//
+//        Long id = underGraduateRepository.save(underGraduate).getId();
+//        Long id2 = underGraduateRepository.save(underGraduate2).getId();
+//        Long id3 = underGraduateRepository.save(underGraduate3).getId();
+//        Long id4 = underGraduateRepository.save(underGraduate4).getId();
+//
+//        UndergraduateFiled undergraduateFiled = UndergraduateFiled.builder()
+//                .undergraduateId(id)
+//                .filed("인공지능")
+//                .build();
+//
+//        UndergraduateFiled undergraduateFiled2 = UndergraduateFiled.builder()
+//                .undergraduateId(id2)
+//                .filed("머신러닝")
+//                .build();
+//
+//        UndergraduateFiled undergraduateFiled3 = UndergraduateFiled.builder()
+//                .undergraduateId(id3)
+//                .filed("데이터베이스")
+//                .build();
+//
+//        UndergraduateFiled undergraduateFiled4 = UndergraduateFiled.builder()
+//                .undergraduateId(id4)
+//                .filed("머신러닝")
 //                .build();
 //
 //
 //
-//        underGraduateRepository.save(underGraduate);
-//        underGraduateRepository.save(underGraduate2);
-//        underGraduateRepository.save(underGraduate3);
-//        underGraduateRepository.save(underGraduate4);
+//        undergraduateFiledRepository.save(undergraduateFiled);
+//        undergraduateFiledRepository.save(undergraduateFiled2);
+//        undergraduateFiledRepository.save(undergraduateFiled3);
+//        undergraduateFiledRepository.save(undergraduateFiled4);
+//
 //
 //
 //    }
+//
+//
 //
 //    @Test
 //    void graduateData(){
@@ -177,7 +222,7 @@
 //                .end("현재")
 //                .description("프로젝트에 대한 설명입니다.")
 //                .leader("홍길동")
-//                .thumb(null)
+//                .thumb(1L)
 //                .build();
 //
 //        Project project2 = Project.builder()
@@ -187,7 +232,7 @@
 //                .end("현재")
 //                .description("프로젝트에 대한 설명입니다.")
 //                .leader("홍길동")
-//                .thumb(null)
+//                .thumb(1L)
 //                .build();
 //
 //
@@ -198,7 +243,7 @@
 //                .end("현재")
 //                .description("프로젝트에 대한 설명입니다.")
 //                .leader("홍길동")
-//                .thumb(null)
+//                .thumb(1L)
 //                .build();
 //
 //        Project project4 = Project.builder()
@@ -208,7 +253,7 @@
 //                .end("현재")
 //                .description("프로젝트에 대한 설명입니다.")
 //                .leader("홍길동")
-//                .thumb(null)
+//                .thumb(1L)
 //                .build();
 //
 //        projectRepository.save(project);
@@ -228,7 +273,7 @@
 //                .end("2024-12-31")
 //                .description("프로젝트에 대한 설명입니다.")
 //                .leader("홍길동")
-//                .thumb(null)
+//                .thumb(1L)
 //                .build();
 //
 //        Project project2 = Project.builder()
@@ -238,7 +283,7 @@
 //                .end("2024-12-31")
 //                .description("프로젝트에 대한 설명입니다.")
 //                .leader("홍길동")
-//                .thumb(null)
+//                .thumb(1L)
 //                .build();
 //
 //        Project project3 = Project.builder()
@@ -248,7 +293,7 @@
 //                .end("2024-12-31")
 //                .description("프로젝트에 대한 설명입니다.")
 //                .leader("홍길동")
-//                .thumb(null)
+//                .thumb(1L)
 //                .build();
 //
 //        Project project4 = Project.builder()
@@ -258,7 +303,7 @@
 //                .end("2024-12-31")
 //                .description("프로젝트에 대한 설명입니다.")
 //                .leader("홍길동")
-//                .thumb(null)
+//                .thumb(1L)
 //                .build();
 //
 //        projectRepository.save(project);
@@ -339,41 +384,41 @@
 //                .build();
 //
 //        ProjectLink projectLink2 = ProjectLink.builder()
-//                .project_id(1L)
+//                .project_id(2L)
 //                .link("https://github.com/qqaazz0222")
 //                .type("git")
 //                .build();
 //
 //        ProjectLink projectLink3 = ProjectLink.builder()
-//                .project_id(1L)
+//                .project_id(3L)
 //                .link("https://github.com/qqaazz0222")
 //                .type("git")
 //                .build();
 //
 //        ProjectLink projectLink4 = ProjectLink.builder()
-//                .project_id(1L)
+//                .project_id(4L)
 //                .link("https://github.com/qqaazz0222")
 //                .type("git")
 //                .build();
 //
 //        ProjectLink projectLink5 = ProjectLink.builder()
-//                .project_id(1L)
+//                .project_id(5L)
 //                .link("https://github.com/qqaazz0222")
 //                .type("git")
 //                .build();
 //
 //        ProjectLink projectLink6 = ProjectLink.builder()
-//                .project_id(1L)
+//                .project_id(6L)
 //                .link("https://github.com/qqaazz0222")
 //                .type("git")
 //                .build();
 //        ProjectLink projectLink7 = ProjectLink.builder()
-//                .project_id(1L)
+//                .project_id(7L)
 //                .link("https://github.com/qqaazz0222")
 //                .type("git")
 //                .build();
 //        ProjectLink projectLink8 = ProjectLink.builder()
-//                .project_id(1L)
+//                .project_id(8L)
 //                .link("https://github.com/qqaazz0222")
 //                .type("git")
 //                .build();

@@ -13,8 +13,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry){
         corsRegistry.addMapping("/**")
-                .allowedOrigins("http://146.56.109.210:8000")
+                .allowedOrigins("*")
                 .allowedMethods("GET", "POST");
+
     }
 
 }

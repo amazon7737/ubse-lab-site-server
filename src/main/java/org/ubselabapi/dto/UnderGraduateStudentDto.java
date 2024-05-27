@@ -3,17 +3,17 @@ package org.ubselabapi.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
-import org.ubselabapi.domain.UnderGraduate;
-import org.ubselabapi.domain.filed;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @Builder
 public class UnderGraduateStudentDto {
+
+    private Long id;
 
     private MultipartFile profile;
 
@@ -21,8 +21,23 @@ public class UnderGraduateStudentDto {
 
     private String email;
 
-    private filed filed;
+    private ArrayList<String> field;
 
+
+    @Data
+    @AllArgsConstructor
+    @Builder
+    public static class UnderGraduateStudentCreateRequest{
+
+        private List<MultipartFile> profile;
+
+        private String name;
+
+        private String email;
+
+        private ArrayList<String> field;
+
+    }
 
 
 
@@ -30,15 +45,18 @@ public class UnderGraduateStudentDto {
     @AllArgsConstructor
     @Builder
     public static class UnderGraduateStudentResponse{
+
         private String profile;
 
         private String name;
 
         private String email;
 
-        private filed filed;
+        private ArrayList<String> field;
 
     }
+
+
 
 
 

@@ -2,16 +2,16 @@ package org.ubselabapi.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Null;
 import jdk.jfr.DataAmount;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.web.bind.annotation.*;
 import org.ubselabapi.domain.Graduate;
 import org.ubselabapi.domain.UnderGraduate;
 import org.ubselabapi.dto.GraduateDto;
@@ -49,7 +49,7 @@ public class StudentController {
     // 이상하게 파일 어로드 하니까 IOException 강요한다. 왜일까?
     @PostMapping("/undergraduate/add")
     @Operation(summary = "학부생 등록" , description = "학부생 등록 요청입니다.")
-    public Result addStudent(@RequestBody UnderGraduateStudentDto dto) throws IOException {
+    public Result addStudent(@ModelAttribute UnderGraduateStudentDto.UnderGraduateStudentCreateRequest dto) throws IOException {
 
 
         studentService.saveUndergraduate(dto);
@@ -64,31 +64,34 @@ public class StudentController {
 
     @PostMapping("/undergraduate/update")
     @Operation(summary = "학부생 수정" , description = "학부생 수정 요청입니다.")
-    public Result updateStudent(@RequestBody UnderGraduateStudentDto dto) throws IOException{
+    public Result updateStudent(@ModelAttribute UnderGraduateStudentDto dto) throws IOException{
 
         studentService.updateUndergraduate(dto);
 
         ResponseDto.Response response = new ResponseDto.Response(200, null, "학생 수정이 완료되었습니다.");
-
 
         return new Result<>(response);
     }
 
     @PostMapping("/undergraduate/delete")
     @Operation(summary = "학부생 삭제" , description = "학부생 삭제 요청입니다.")
-    public Result deleteStudent(@RequestBody Long StudentId){
-        studentService.deleteUndergraduate(StudentId);
+    public Result deleteStudent(@RequestParam String email){
+        try{
+            log.info("data:{}", email);
+            studentService.deleteUndergraduate(email);
+            ResponseDto.Response response = new ResponseDto.Response(200, null, "학생 삭제가 완료되었습니다.");
+            return new Result<>(response);
+        }catch (NullPointerException e){
+            ResponseDto.Response response = new ResponseDto.Response(401, null, e.getMessage());
+            return new Result<>(response);
+        }
 
-        ResponseDto.Response response = new ResponseDto.Response(200, null, "학생 삭제가 완료되었습니다.");
 
-        return new Result<>(response);
     }
 
     @GetMapping("/graduate")
     @Operation(summary = "졸업생 전체 조회", description = "졸업생 전체 조회입니다.")
     public Result SearchAllGraduate(){
-
-
         List<Graduate> list = studentService.findGraduates();
          ResponseDto.Response response = new ResponseDto.Response(200, list, "졸업생 조회입니다.");
          return new Result<>(response);
@@ -115,9 +118,9 @@ public class StudentController {
 
     @PostMapping("/graduate/delete")
     @Operation(summary = "졸업생 삭제" , description = "졸업생 삭제 요청입니다.")
-    public Result deleteGraduate(@RequestBody Long studentId){
+    public Result deleteGraduate(@RequestParam String email){
 
-        studentService.deleteGraduate(studentId);
+        studentService.deleteGraduate(email);
 
         ResponseDto.Response response = new ResponseDto.Response(200, null, "졸업생 삭제가 완료되었습니다.");
 
