@@ -5,7 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import org.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
+import org.ubselabapi.domain.ProfessorFiled;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -27,7 +29,7 @@ public class ProfessorProfileDto {
     @Builder
     public static class createProfileRequest{
 
-        private List<MultipartFile> profileImage;
+        private List<MultipartFile> profile;
 
         private String name;
 
@@ -41,13 +43,12 @@ public class ProfessorProfileDto {
     @AllArgsConstructor
     @Builder
     public static class updateProfileRequest{
-        private List<MultipartFile> file;
 
         private String name;
 
         private String email;
 
-        private List<String> field;
+        private ArrayList<String> field;
     }
 
     @Data
@@ -63,13 +64,6 @@ public class ProfessorProfileDto {
         private List<String> field;
     }
 
-    @Data
-    @AllArgsConstructor
-    @Builder
-    public static class deleteProfileRequest{
 
-        private JSONObject emailInfo;
-
-    }
 
 }

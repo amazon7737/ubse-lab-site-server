@@ -1,10 +1,7 @@
 package org.ubselabapi.service;
 
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,6 +45,21 @@ public class FileService {
 
 
     }
+
+    @Transactional
+    public void updateFileAndupdateUrl(Long id, MultipartFile file) throws IOException {
+
+        UploadFile attachFile = fileStore.storeFile(file);
+
+
+        Image image = imageRepository.findById(id).get();
+
+        image.updateUrl("http://146.56.109.210:8000/display?filename="+attachFile.getStoreFileName());
+
+    }
+
+
+
 
     public Image findById(Long Id){
         return imageRepository.findById(Id).get();

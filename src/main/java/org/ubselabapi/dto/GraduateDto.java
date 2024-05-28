@@ -9,6 +9,8 @@ import lombok.Data;
 @Builder
 public class GraduateDto {
 
+    private Long id;
+
     private Long graduated;
 
     private String name;
@@ -16,6 +18,7 @@ public class GraduateDto {
     private String email;
 
     private String company;
+
 
 
 }

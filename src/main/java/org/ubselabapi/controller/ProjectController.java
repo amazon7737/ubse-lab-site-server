@@ -8,10 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.ubselabapi.domain.Project;
 import org.ubselabapi.dto.LinkDto;
 import org.ubselabapi.dto.ProjectDto;
@@ -43,8 +40,8 @@ public class ProjectController {
 
     }
 
-    @PostMapping("/progress/add")
-    @Operation(summary = "진행중인 프로젝트 등록", description = "진행중인 프로젝트 등록 요청입니다.")
+    @PostMapping("/progress")
+    @Operation(summary = "진행중인 프로젝트 등록", description = "진행중인 프로젝트 등록 요청입니다. body로 던지시면됩니다.")
     public Result addProgress(@RequestBody ProjectDto.createProjectRequest dto) throws IOException {
 
         projectService.saveProject(dto);
@@ -55,9 +52,9 @@ public class ProjectController {
 
     }
 
-    @PostMapping("/progress/update")
-    @Operation(summary = "진행중인 프로젝트 수정", description = "진행중인 프로젝트 수정 요청입니다.")
-    public Result updateProgress(@RequestBody ProjectDto.createProjectRequest dto) throws IOException{
+    @PatchMapping("/progress")
+    @Operation(summary = "진행중인 프로젝트 수정", description = "진행중인 프로젝트 수정 요청입니다. body로 던지시면되고 조회했던 데이터에 수정된 데이터 포함시켜서 주시면 됩니다.")
+    public Result updateProgress(@ModelAttribute ProjectDto.createProjectRequest dto) throws IOException{
 
 
         projectService.saveProject(dto);
@@ -68,9 +65,9 @@ public class ProjectController {
 
     }
 
-    @PostMapping("/progress/delete")
-    @Operation(summary = "진행중인 프로젝트 삭제", description = "진행중인 프로젝트 삭제 요청입니다.")
-    public Result deleteProgress(@RequestBody Long projectId){
+    @DeleteMapping("/progress")
+    @Operation(summary = "진행중인 프로젝트 삭제", description = "진행중인 프로젝트 삭제 요청입니다. param로 던지시면되고 Long projectId을 주셔야 됩니다.")
+    public Result deleteProgress(@RequestParam Long projectId){
 
         projectService.deleteProject(projectId);
 
@@ -93,8 +90,8 @@ public class ProjectController {
     }
 
 
-    @PostMapping("/complete/add")
-    @Operation(summary = "완료된 프로젝트 등록", description = "완료된 프로젝트 등록 요청입니다.")
+    @PostMapping("/complete")
+    @Operation(summary = "완료된 프로젝트 등록", description = "완료된 프로젝트 등록 요청입니다. body로 던지시면 됩니다.")
     public Result addComplete(@RequestBody ProjectDto.createProjectRequest dto) throws IOException{
 
         projectService.saveProject(dto);
@@ -104,8 +101,8 @@ public class ProjectController {
         return new Result<>(response);
     }
 
-    @PostMapping("/complete/update")
-    @Operation(summary = "완료된 프로젝트 수정", description = "완료된 프로젝트 수정 요청입니다.")
+    @PatchMapping("/complete")
+    @Operation(summary = "완료된 프로젝트 수정", description = "완료된 프로젝트 수정 요청입니다. body로 던지시면되고 조회했던 데이터에 수정된 데이터 포함시켜서 주시면 됩니다.")
     public Result updateComplete(@RequestBody ProjectDto.createProjectRequest dto) throws IOException{
 
 
@@ -115,9 +112,9 @@ public class ProjectController {
         return new Result<>(response);
     }
 
-    @PostMapping("/complete/delete")
-    @Operation(summary = "완료된 프로젝트 삭제" , description = "완료된 프로젝트 삭제 요청입니다.")
-    public Result deleteComplete(@RequestBody Long projectId){
+    @DeleteMapping("/complete")
+    @Operation(summary = "완료된 프로젝트 삭제" , description = "완료된 프로젝트 삭제 요청입니다. param로 던지시면되고 Long projectId을 주셔야 됩니다.")
+    public Result deleteComplete(@RequestParam Long projectId){
 
         projectService.deleteProject(projectId);
 

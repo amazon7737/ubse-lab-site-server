@@ -1,7 +1,13 @@
 package org.ubselabapi.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +40,9 @@ public class ProfessorController {
     }
 
 
-    @PostMapping("/professor/update")
-    @Operation(summary = "교수님 프로필 수정", description = "교수님 프로필 수정 요청입니다.")
-    public Result professorProfileUpdate(@ModelAttribute ProfessorProfileDto.updateProfileRequest dto) throws IOException {
+    @PatchMapping("/professor")
+    @Operation(summary = "교수님 프로필 수정", description = "교수님 프로필 수정 요청입니다. body로 던지시면되고 조회했던 데이터에 수정된 데이터 포함시켜서 주시면 됩니다.")
+    public Result professorProfileUpdate(@RequestBody @Parameter(name = "thumb" , description = "이미지 파일 번호") ProfessorProfileDto.updateProfileRequest dto) throws IOException {
 
         professorService.updateProfessorInfo(dto);
 
@@ -45,28 +51,28 @@ public class ProfessorController {
         return new Result(response);
     }
 
-    @PostMapping("/professor/add")
-    @Operation(summary = "교수님 프로필 생성", description = "교수님 프로필 생성 요청입니다.")
-    public Result professorProfileCreate(@ModelAttribute ProfessorProfileDto.createProfileRequest dto) throws IOException{
+//    @PostMapping("/professor")
+//    @Operation(summary = "교수님 프로필 생성", description = "교수님 프로필 생성 요청입니다. body로 던지시면되고 file로 통째로 주셔야됩니다.")
+//    public Result professorProfileCreate(@ModelAttribute ProfessorProfileDto.createProfileRequest dto) throws IOException{
+//
+//        professorService.createProfessorInfo(dto);
+//
+//        ResponseDto.Response response = new ResponseDto.Response(200, null, "교수님 프로필 생성이 완료되었습니다.");
+//
+//        return new Result(response);
+//    }
 
-        professorService.createProfessorInfo(dto);
 
-        ResponseDto.Response response = new ResponseDto.Response(200, null, "교수님 프로필 생성이 완료되었습니다.");
-
-        return new Result(response);
-    }
-
-
-    @PostMapping("/professor/delete")
-    @Operation(summary = "교수님 프로필 삭제", description = "교수님 프로필 삭제 요청입니다.")
-    public Result professorProfileDelete(@RequestBody JSONObject professorId) throws JSONException {
-
-        professorService.deleteProfessorInfo(professorId);
-
-        ResponseDto.Response response = new ResponseDto.Response(200, null, "교수님 프로필 삭제가 완료되었습니다.");
-
-        return new Result(response);
-    }
+//    @DeleteMapping("/professor")
+//    @Operation(summary = "교수님 프로필 삭제", description = "교수님 프로필 삭제 요청입니다. param로 던지시면되고 String professorName으로 주셔야됩니다.")
+//    public Result professorProfileDelete(@RequestParam String professorName) throws JSONException {
+//
+//        professorService.deleteProfessorInfo(professorName);
+//
+//        ResponseDto.Response response = new ResponseDto.Response(200, null, "교수님 프로필 삭제가 완료되었습니다.");
+//
+//        return new Result(response);
+//    }
 
 
     @Data

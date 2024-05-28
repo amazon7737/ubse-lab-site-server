@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,12 +40,24 @@ public class UnderGraduateStudentDto {
 
     }
 
+    @Data
+    @AllArgsConstructor
+    @Builder
+    public static class UnderGraduateStudentUpdateRequest{
+        private Long id;
+        private String name;
+        private String email;
+        private ArrayList<String> field;
+    }
+
 
 
     @Data
     @AllArgsConstructor
     @Builder
     public static class UnderGraduateStudentResponse{
+
+        private Long id;
 
         private String profile;
 

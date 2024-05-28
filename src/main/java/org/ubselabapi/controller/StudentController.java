@@ -47,8 +47,8 @@ public class StudentController {
     }
 
     // 이상하게 파일 어로드 하니까 IOException 강요한다. 왜일까?
-    @PostMapping("/undergraduate/add")
-    @Operation(summary = "학부생 등록" , description = "학부생 등록 요청입니다.")
+    @PostMapping("/undergraduate")
+    @Operation(summary = "학부생 등록" , description = "학부생 등록 요청입니다. body로 던지시면되고 file은 통째로 주셔야됩니다.")
     public Result addStudent(@ModelAttribute UnderGraduateStudentDto.UnderGraduateStudentCreateRequest dto) throws IOException {
 
 
@@ -62,9 +62,9 @@ public class StudentController {
 
     }
 
-    @PostMapping("/undergraduate/update")
-    @Operation(summary = "학부생 수정" , description = "학부생 수정 요청입니다.")
-    public Result updateStudent(@ModelAttribute UnderGraduateStudentDto dto) throws IOException{
+    @PatchMapping("/undergraduate")
+    @Operation(summary = "학부생 수정" , description = "학부생 수정 요청입니다. body로 던지시면되고 조회했던 데이터에 수정된 데이터 포함시켜서 주시면 됩니다.")
+    public Result updateStudent(@RequestBody UnderGraduateStudentDto.UnderGraduateStudentUpdateRequest dto) throws IOException{
 
         studentService.updateUndergraduate(dto);
 
@@ -73,12 +73,11 @@ public class StudentController {
         return new Result<>(response);
     }
 
-    @PostMapping("/undergraduate/delete")
-    @Operation(summary = "학부생 삭제" , description = "학부생 삭제 요청입니다.")
-    public Result deleteStudent(@RequestParam String email){
+    @DeleteMapping("/undergraduate")
+    @Operation(summary = "학부생 삭제" , description = "학부생 삭제 요청입니다. param로 던지시면되고 String email을 주셔야됩니다.")
+    public Result deleteStudent(@RequestParam Long id){
         try{
-            log.info("data:{}", email);
-            studentService.deleteUndergraduate(email);
+            studentService.deleteUndergraduate(id);
             ResponseDto.Response response = new ResponseDto.Response(200, null, "학생 삭제가 완료되었습니다.");
             return new Result<>(response);
         }catch (NullPointerException e){
@@ -97,8 +96,8 @@ public class StudentController {
          return new Result<>(response);
     }
 
-    @PostMapping("/graduate/add")
-    @Operation(summary = "졸업생 등록", description = "졸업생 등록 요청입니다.")
+    @PostMapping("/graduate")
+    @Operation(summary = "졸업생 등록", description = "졸업생 등록 요청입니다. body로 던지시면됩니다.")
     public Result addGraduate(@RequestBody GraduateDto dto){
 
         studentService.saveGraduate(dto);
@@ -106,8 +105,8 @@ public class StudentController {
         return new Result<>(response);
     }
 
-    @PostMapping("/graduate/update")
-    @Operation(summary = "졸업생 수정", description = "졸업생 수정 요청입니다.")
+    @PatchMapping("/graduate")
+    @Operation(summary = "졸업생 수정", description = "졸업생 수정 요청입니다. body로 던지시면되고 조회했던 데이터에 수정된 데이터 포함시켜서 주시면 됩니다.")
     public Result updateGraudate(@RequestBody GraduateDto dto){
 
         studentService.updateGraduate(dto);
@@ -116,11 +115,11 @@ public class StudentController {
         return new Result<>(response);
     }
 
-    @PostMapping("/graduate/delete")
-    @Operation(summary = "졸업생 삭제" , description = "졸업생 삭제 요청입니다.")
-    public Result deleteGraduate(@RequestParam String email){
+    @DeleteMapping("/graduate")
+    @Operation(summary = "졸업생 삭제" , description = "졸업생 삭제 요청입니다. param로 던지시면되고 String email을 주셔야됩니다.")
+    public Result deleteGraduate(@RequestParam Long id){
 
-        studentService.deleteGraduate(email);
+        studentService.deleteGraduate(id);
 
         ResponseDto.Response response = new ResponseDto.Response(200, null, "졸업생 삭제가 완료되었습니다.");
 

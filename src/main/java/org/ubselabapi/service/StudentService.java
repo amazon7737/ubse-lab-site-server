@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.ubselabapi.domain.Graduate;
+import org.ubselabapi.domain.Image;
 import org.ubselabapi.domain.UnderGraduate;
 import org.ubselabapi.domain.UndergraduateFiled;
 import org.ubselabapi.dto.GraduateDto;
@@ -18,6 +19,7 @@ import org.ubselabapi.repository.UndergraduateFiledRepository;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -47,26 +49,61 @@ public class StudentService {
 
            List<UndergraduateFiled> undergraduateFileds =undergraduateFiledRepository.findByUndergraduateId(underGraduates.get(i).getId());
 
+           ArrayList<String> fieldList = new ArrayList<>();
+
            for(int j=0; j<undergraduateFileds.size(); j++){
 
-           ArrayList<String> fieldList = new ArrayList<>();
 
            fieldList.add(undergraduateFileds.get(j).getFiled());
 
+
+
+
+           }
+
            UnderGraduateStudentDto.UnderGraduateStudentResponse resultUnderGraduate = UnderGraduateStudentDto.UnderGraduateStudentResponse.builder()
                    .name(underGraduates.get(i).getName())
+                   .id(underGraduates.get(i).getId())
                    .profile(profile)
                    .email(underGraduates.get(i).getEmail())
                    .field(fieldList)
                    .build();
 
-            result.add(resultUnderGraduate);
-
-           }
-
+           result.add(resultUnderGraduate);
        }
 
        return result;
+    }
+
+    public List<UndergraduateFiled> findFiledById(Long id){
+        return undergraduateFiledRepository.findByUndergraduateId(id);
+    }
+
+    public UnderGraduateStudentDto.UnderGraduateStudentResponse findUnderGraduateById(Long id){
+        UnderGraduate underGraduate = underGraduateRepository.findById(id).get();
+        List<UndergraduateFiled> undergraduateFiled = undergraduateFiledRepository.findByUndergraduateId(id);
+
+
+//        ArrayList<String> fieldList = new ArrayList<>();
+
+//        for(int i=0; i< undergraduateFiled.size();i++){
+//            fieldList.add(undergraduateFiled.get(i).getFiled());
+//        }
+//
+        UnderGraduateStudentDto.UnderGraduateStudentResponse response = UnderGraduateStudentDto.UnderGraduateStudentResponse.builder()
+                .id(id)
+                .name(underGraduate.getName())
+                .email(underGraduate.getEmail())
+                .field(null)
+                .profile(null)
+                .build();
+
+        return response;
+
+    }
+
+    public List<UndergraduateFiled> findUnderGraduateFiledById(Long id){
+        return undergraduateFiledRepository.findByUndergraduateId(id);
     }
 
     @Transactional
@@ -102,64 +139,61 @@ public class StudentService {
     }
 
     @Transactional
-    public UnderGraduate updateUndergraduate(UnderGraduateStudentDto dto) throws IOException{
+    public void updateUndergraduate(UnderGraduateStudentDto.UnderGraduateStudentUpdateRequest dto) throws IOException{
 
-        Long profileId = fileService.uploadFile(dto.getProfile());
+        UnderGraduate underGraduate = underGraduateRepository.findById(dto.getId()).get();
 
-        UnderGraduate student = UnderGraduate.builder()
+        UnderGraduate input = UnderGraduate.builder()
+                .id(dto.getId())
                 .name(dto.getName())
                 .email(dto.getEmail())
-                .profile(profileId)
+                .profile(underGraduate.getProfile())
                 .build();
 
-
-//        List<UndergraduateFiled> undergraduateFiledList = undergraduateFiledRepository.findByUndergraduateId(dto.getId());
-
-        // 분야 수정 및 저장
-        for(int i=0; i<dto.getField().size(); i++){
-
-            UndergraduateFiled undergraduateFiled = UndergraduateFiled.builder()
-                            .filed(dto.getField().get(i))
-                            .undergraduateId(dto.getId())
-                            .build();
-
-           undergraduateFiledRepository.save(undergraduateFiled);
-
-        }
+        // save에 내장된 update 활용
+        underGraduateRepository.save(input);
+//        underGraduateRepository.updateUnderGraduateById(dto.getId());
 
 
-
-
-        // filed 주입
-//        for(int i=0 ;i<undergraduateFiledList.size();i++){
-//
-//        UndergraduateFiled undergraduateFiled = UndergraduateFiled.builder()
-//                .filed(undergraduateFiledList.get(i).getFiled())
-//                .undergraduateId(undergraduateFiledList.get(i).getUndergraduateId())
-//                .build();
-//
-//        undergraduateFiledRepository.save(undergraduateFiled);
-//
-//        }
-
-        UnderGraduate result = underGraduateRepository.save(student);
-
-        return result;
+        updateUndergraduateField(dto.getId(), dto.getField());
 
     }
 
 
     @Transactional
-    public void deleteUndergraduate(String email)  {
+    public void updateUndergraduateField(Long undergrduadateId, List<String> field){
 
-        UnderGraduate underGraduate = underGraduateRepository.findByEmail(email);
+        List<UndergraduateFiled> undergraduateFiled = undergraduateFiledRepository.findByUndergraduateId(undergrduadateId);
 
-        if(!underGraduate.getId().equals(null)){
-            throw new NullPointerException("해당 학생이 존재하지 않습니다.");
+        deleteByUndergraduateId(undergrduadateId);
+
+        for(int i=0; i<field.size();i++){
+
+            UndergraduateFiled undergraduateFiled1 = UndergraduateFiled.builder()
+                            .undergraduateId(undergrduadateId)
+                            .filed(field.get(i))
+                            .build();
+            undergraduateFiledRepository.save(undergraduateFiled1);
         }
 
-        underGraduateRepository.deleteByEmail(email);
-        undergraduateFiledRepository.deleteAllByUndergraduateId(underGraduate.getId());
+    }
+
+    public void deleteByUndergraduateId(Long id){
+        undergraduateFiledRepository.deleteByUndergraduateId(id);
+    }
+
+
+    @Transactional
+    public void deleteUndergraduate(Long id)  {
+
+        UnderGraduate underGraduate = underGraduateRepository.findById(id).get();
+
+//        if(!underGraduate.getId().equals(null)){
+//            throw new NullPointerException("해당 학생이 존재하지 않습니다.");
+//        }
+
+        underGraduateRepository.deleteById(id);
+        undergraduateFiledRepository.deleteAllByUndergraduateId(id);
         fileService.deleteImage(underGraduate.getProfile());
 
     }
@@ -185,25 +219,24 @@ public class StudentService {
 
 
     @Transactional
-    public Graduate updateGraduate(GraduateDto dto){
-        Graduate student = Graduate.builder()
-                .name(dto.getName())
-                .email(dto.getEmail())
-                .company(dto.getCompany())
-                .graduated_date(dto.getGraduated())
-                .build();
+    public void updateGraduate(GraduateDto dto){
 
-        Graduate result = graduateRepository.save(student);
+        Graduate graduate = graduateRepository.findById(dto.getId()).get();
 
-        return result;
+        graduate.updateGraduate(dto.getGraduated(),dto.getName(), dto.getEmail(), dto.getCompany());
+
     }
 
 
     @Transactional
-    public void deleteGraduate(String email){
-        graduateRepository.deleteByEmail(email);
+    public void deleteGraduate(Long id){
+        graduateRepository.deleteById(id);
     }
 
+
+    public Graduate findGraudateById(Long id){
+        return graduateRepository.findById(id).get();
+    }
 
 
 }

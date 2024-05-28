@@ -30,6 +30,13 @@ public class Graduate {
     @Column(nullable = true, length = 45, unique = false)
     private String company;
 
+    public void updateGraduate(Long graduated_date , String name, String email, String company){
+        this.graduated_date = graduated_date;
+        this.name = name;
+        this.email = email;
+        this.company = company;
+    }
+
 
 
 }

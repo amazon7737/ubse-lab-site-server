@@ -23,4 +23,6 @@ public class UndergraduateFiled {
     @Column(nullable = true, length = 255, unique = false)
     private String filed;
 
+
+
 }

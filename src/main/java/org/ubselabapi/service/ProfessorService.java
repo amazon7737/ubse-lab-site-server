@@ -38,7 +38,7 @@ public class ProfessorService {
     public void createProfessorInfo(ProfessorProfileDto.createProfileRequest request) throws IOException{
 
         // 이미지 업로드 및 저장
-        Long id = fileService.uploadFile(request.getProfileImage().get(0));
+        Long id = fileService.uploadFile(request.getProfile().get(0));
 
         // 이미지 번호 검색
         Image profile = fileService.findById(id);
@@ -89,51 +89,79 @@ public class ProfessorService {
 
 
     @Transactional
-    public void  updateProfessorInfo(ProfessorProfileDto.updateProfileRequest profileRequest) throws IOException {
+    public void  updateProfessorInfo(ProfessorProfileDto.updateProfileRequest profileRequest)  {
 
-        Long profileId = fileService.uploadFile(profileRequest.getFile().get(0));
 
-        Professor professor = Professor.builder()
-                .profile(profileId)
-                .name(profileRequest.getName())
-                .email(profileRequest.getEmail())
-                .build();
+        Professor professor = professorRepository.findById(1L).get();
 
-        List<ProfessorFiled> professorFiledList = professorFiledRepository.findAll();
-
-        for(int i=0; i<professorFiledList.size(); i++){
-
-        ProfessorFiled  professorFiled = ProfessorFiled.builder()
-                        .professor_filed_id(professorFiledList.get(i).getProfessor_filed_id())
-                        .professor_id(1L)
-                        .data(profileRequest.getField().get(i))
+        Professor input = Professor.builder()
+                        .email(profileRequest.getEmail())
+                        .name(profileRequest.getName())
                         .build();
 
-        professorFiledRepository.save(professorFiled);
 
+        professor.updateProfessor(profileRequest.getName(), profileRequest.getEmail());
+
+
+        updateProfessorField(1L, profileRequest.getField());
+
+
+    }
+
+    @Transactional
+    public List<String> updateProfessorField(Long id , ArrayList<String> list){
+
+//        List<ProfessorFiled> professorFiledList = professorFiledRepository.findByProfessorId(id);
+
+
+        deleteByProfessorId(id);
+        List<String> result = new ArrayList<>();
+
+        for(int i=0; i<list.size();i++) {
+
+            ProfessorFiled professorFiled = ProfessorFiled.builder()
+                    .professor_id(1L)
+                    .data(list.get(i))
+                    .build();
+
+            String data = professorFiledRepository.save(professorFiled).getData();
+            result.add(data);
         }
 
-        professorRepository.save(professor);
-
-
+        return result;
     }
 
 
     @Transactional
-    public void deleteProfessorInfo(JSONObject professorId) throws JSONException {
+    public void deleteByProfessorId(Long id){
+        professorFiledRepository.deleteByProfessor_id(id);
+    }
 
-        Long id= Long.valueOf(String.valueOf(professorId.getJSONObject("id")));
 
-        Professor professor = professorRepository.findById(id).get();
-        List<ProfessorFiled> professorFiled = professorFiledRepository.findByProfessorId(id);
+    @Transactional
+    public void deleteProfessorInfo(String professorName)  {
+
+
+
+        Professor professor = professorRepository.findByName(professorName).get();
+        List<ProfessorFiled> professorFiled = professorFiledRepository.findByProfessorId(professor.getId());
         Image image = imageRepository.findById(professor.getProfile()).get();
 
-        professorRepository.deleteById(id);
-        professorFiledRepository.deleteAllByProfessor_id(id);
+        professorRepository.deleteById(professor.getId());
+        professorFiledRepository.deleteByProfessor_id(professor.getId());
         imageRepository.deleteById(image.getId());
 
     }
 
+
+    public Professor findById(){
+        return professorRepository.findById(1L).get();
+    }
+
+
+    public ArrayList<ProfessorFiled> findProfessorFiledById(){
+        return professorFiledRepository.findByProfessorId(1L);
+    }
 
 
 

@@ -69,6 +69,7 @@ public class ProjectService {
                 .thumb(thumb)
                 .member(memberList.get(i))
                 .link(linkList.get(i))
+                .id(projects.get(i).getProject_id())
                 .build();
 
         // 반환할 리스트에 객체 추가
@@ -115,6 +116,7 @@ public class ProjectService {
                     .thumb(thumb)
                     .member(memberList.get(i))
                     .link(linkList.get(i))
+                    .id(projects.get(i).getProject_id())
                     .build();
 
             // 반환할 리스트에 객체 추가

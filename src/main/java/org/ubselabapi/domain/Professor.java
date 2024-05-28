@@ -28,4 +28,9 @@ public class Professor {
     @Column(nullable = true, length = 45, unique = false)
     private String email;
 
+    public void updateProfessor( String name, String email){
+        this.name = name;
+        this.email = email;
+    }
+
 }

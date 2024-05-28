@@ -62,6 +62,8 @@ public class ProjectDto {
     @Builder
     public static class selectProjectResponse{
 
+        private Long id;
+
         private String thumb;
 
         private String name;
